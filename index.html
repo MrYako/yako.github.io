@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Arithmetic Mean Calculator</title>
+    <title>Evaluation Results</title>
 </head>
 <body>
-    <h1>Arithmetic Mean Calculator</h1>
-    <form>
-        <label for="input">Enter a list of numbers (separated by commas):</label><br>
-        <input type="text" id="input" name="input"><br><br>
-        <button type="button" onclick="calculate()">Calculate</button>
-    </form>
-    <p id="result"></p>
-    <script>
-        function calculate() {
-            var input = document.getElementById("input").value;
-            var numbers = input.split(",").map(parseFloat);
-            var sum = numbers.reduce(function(a, b) {
-                return a + b;
-            });
-            var mean = sum / numbers.length;
-            document.getElementById("result").innerHTML = "The arithmetic mean is " + mean.toFixed(2);
-            saveToTextFile(input, mean.toFixed(2));
-        }
+    <?php
+    $filename = "result.txt";
 
-        function saveToTextFile(input, mean) {
-            var textToSave = "Input: " + input + ", Mean: " + mean + "\n";
-            var filename = "results.txt";
-            var blob = new Blob([textToSave], {type: "text/plain;charset=utf-8"});
-            saveAs(blob, filename);
-        }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" integrity="sha512-VMVI7Ok+ky7FJ8SWHQC1DBskTgT0kVPP4bs8fUN18V7JG0wMAu3tq3j2xpBPLk9/+yjeLJ+FEpbf8RzjZ7cFCA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    // Read input from text file
+    $file = fopen($filename, "r");
+    $line = fgets($file);
+    $numbers = explode(",", $line);
+    $sum = $numbers[0];
+    $count = $numbers[1];
+    fclose($file);
+
+    // Update sum and count
+    if(isset($_POST['evaluation'])) {
+    $new_eval = $_POST['evaluation'];
+    $sum += $new_eval;
+    $count += 1;
+
+    // Write new sum and count to file
+    $file = fopen($filename, "w");
+    fwrite($file, $sum . "," . $count);
+    fclose($file);
+    }
+
+    // Output result on web page
+    echo "<h1>Evaluation Results</h1>";
+    echo "<p>Previous Sum: $sum</p>";
+    echo "<p>Previous Count: $count</p>";
+    if(isset($_POST['evaluation'])) {
+    echo "<p>New Sum: $sum</p>";
+    echo "<p>New Count: $count</p>";
+    }
+    ?>
+
+    <form method="post">
+        <label for="evaluation">Enter Evaluation:</label>
+        <input type="number" name="evaluation" id="evaluation">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
