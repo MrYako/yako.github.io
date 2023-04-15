@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Evaluation Form</title>
+</head>
+
+<body>
+  <h1>Evaluation Form</h1>
+  <form onsubmit="return calculateMean()">
+    <p>
+      Please rate our product:
+      <label>
+        <input type="radio" name="rating" value="1" required> 1 star
+      </label>
+      <label>
+        <input type="radio" name="rating" value="2"> 2 stars
+      </label>
+      <label>
+        <input type="radio" name="rating" value="3"> 3 stars
+      </label>
+      <label>
+        <input type="radio" name="rating" value="4"> 4 stars
+      </label>
+      <label>
+        <input type="radio" name="rating" value="5"> 5 stars
+      </label>
+    </p>
+    <p>
+      <label>
+        Please enter your comments:
+        <br>
+        <textarea name="comments" rows="5" cols="50"></textarea>
+      </label>
+    </p>
+    <p>
+      <button type="submit">Submit</button>
+    </p>
+  </form>
+
+  <script>
+    function calculateMean() {
+      var inputs = document.getElementsByName('rating');
+      var total = 0;
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) {
+          total += parseInt(inputs[i].value);
+          break;
+        }
+      }
+      var comments = document.getElementsByName('comments')[0].value;
+      var mean = total;
+      var text = "Rating: " + total + " stars" + "\nComments: " + comments + "\nMean: " + mean;
+      console.log(text); // Prints message to console
+      return false; // Prevents default form submission behavior
+    }
+  </script>
+
+</body>
+
+</html>
